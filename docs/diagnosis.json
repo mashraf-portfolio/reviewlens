@@ -1,0 +1,788 @@
+{
+  "generated_at": "2026-06-06T14:38:03.566313+00:00",
+  "recency_window": 12,
+  "total_n": 40,
+  "per_source_n": {
+    "appstore": 40
+  },
+  "target_app": "USim",
+  "pains": [
+    {
+      "theme": "support",
+      "sentiment": "negative",
+      "rates": {
+        "USim": {
+          "per_100": 10.0,
+          "ci_low": 2.79,
+          "ci_high": 30.1,
+          "n": 2
+        },
+        "Airalo": {
+          "per_100": 16.67,
+          "ci_low": 4.7,
+          "ci_high": 44.8,
+          "n": 2
+        }
+      },
+      "field_median_per_100": 13.34,
+      "loudness": 10.0
+    },
+    {
+      "theme": "activation",
+      "sentiment": "negative",
+      "rates": {
+        "USim": {
+          "per_100": 10.0,
+          "ci_low": 2.79,
+          "ci_high": 30.1,
+          "n": 2
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 10.0,
+      "loudness": 10.0
+    },
+    {
+      "theme": "refund_billing",
+      "sentiment": "negative",
+      "rates": {
+        "USim": {
+          "per_100": 10.0,
+          "ci_low": 2.79,
+          "ci_high": 30.1,
+          "n": 2
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 10.0,
+      "loudness": 10.0
+    },
+    {
+      "theme": "app_ux",
+      "sentiment": "negative",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "refund_billing",
+      "sentiment": "positive",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "coverage_speed",
+      "sentiment": "neutral",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "positive",
+      "sentiment": "negative",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "value_pricing",
+      "sentiment": "positive",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "app_ux",
+      "sentiment": "neutral",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "coverage_speed",
+      "sentiment": "positive",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "positive",
+      "sentiment": "neutral",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Airalo": {
+          "per_100": 8.33,
+          "ci_low": 1.49,
+          "ci_high": 35.39,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 6.67,
+      "loudness": 5.0
+    },
+    {
+      "theme": "value_pricing",
+      "sentiment": "negative",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 8.75,
+      "loudness": 5.0
+    },
+    {
+      "theme": "app_ux",
+      "sentiment": "positive",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 8.75,
+      "loudness": 5.0
+    },
+    {
+      "theme": "support",
+      "sentiment": "neutral",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 8.75,
+      "loudness": 5.0
+    },
+    {
+      "theme": "coverage_speed",
+      "sentiment": "negative",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 8.75,
+      "loudness": 5.0
+    },
+    {
+      "theme": "positive",
+      "sentiment": "positive",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 8.75,
+      "loudness": 5.0
+    },
+    {
+      "theme": "activation",
+      "sentiment": "neutral",
+      "rates": {
+        "USim": {
+          "per_100": 5.0,
+          "ci_low": 0.89,
+          "ci_high": 23.61,
+          "n": 1
+        },
+        "Holafly": {
+          "per_100": 12.5,
+          "ci_low": 2.24,
+          "ci_high": 47.09,
+          "n": 1
+        }
+      },
+      "field_median_per_100": 8.75,
+      "loudness": 5.0
+    }
+  ],
+  "deltas": [
+    {
+      "theme": "support",
+      "sentiment": "neutral",
+      "vs_app": "Holafly",
+      "delta_per_100": -7.5,
+      "support_level": "Directional",
+      "claim": "USim has 7.5 per-100 lower neutral support mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "value_pricing",
+      "sentiment": "negative",
+      "vs_app": "Holafly",
+      "delta_per_100": -7.5,
+      "support_level": "Directional",
+      "claim": "USim has 7.5 per-100 lower negative value_pricing mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "positive",
+      "sentiment": "positive",
+      "vs_app": "Holafly",
+      "delta_per_100": -7.5,
+      "support_level": "Directional",
+      "claim": "USim has 7.5 per-100 lower positive mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "coverage_speed",
+      "sentiment": "negative",
+      "vs_app": "Holafly",
+      "delta_per_100": -7.5,
+      "support_level": "Directional",
+      "claim": "USim has 7.5 per-100 lower negative coverage_speed mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "app_ux",
+      "sentiment": "positive",
+      "vs_app": "Holafly",
+      "delta_per_100": -7.5,
+      "support_level": "Directional",
+      "claim": "USim has 7.5 per-100 lower positive app_ux mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "activation",
+      "sentiment": "neutral",
+      "vs_app": "Holafly",
+      "delta_per_100": -7.5,
+      "support_level": "Directional",
+      "claim": "USim has 7.5 per-100 lower neutral activation mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "support",
+      "sentiment": "negative",
+      "vs_app": "Airalo",
+      "delta_per_100": -6.67,
+      "support_level": "Directional",
+      "claim": "USim has 6.7 per-100 lower negative support mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 10.0,
+        "ci_low": 2.79,
+        "ci_high": 30.1,
+        "n": 2
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 16.67,
+        "ci_low": 4.7,
+        "ci_high": 44.8,
+        "n": 2
+      }
+    },
+    {
+      "theme": "coverage_speed",
+      "sentiment": "positive",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower positive coverage_speed mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "coverage_speed",
+      "sentiment": "neutral",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower neutral coverage_speed mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "value_pricing",
+      "sentiment": "positive",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower positive value_pricing mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "positive",
+      "sentiment": "negative",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower negative positive mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "app_ux",
+      "sentiment": "negative",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower negative app_ux mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "refund_billing",
+      "sentiment": "positive",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower positive refund_billing mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "app_ux",
+      "sentiment": "neutral",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower neutral app_ux mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "positive",
+      "sentiment": "neutral",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower neutral positive mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "refund_billing",
+      "sentiment": "negative",
+      "vs_app": "Holafly",
+      "delta_per_100": -2.5,
+      "support_level": "Directional",
+      "claim": "USim has 2.5 per-100 lower negative refund_billing mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 10.0,
+        "ci_low": 2.79,
+        "ci_high": 30.1,
+        "n": 2
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "activation",
+      "sentiment": "negative",
+      "vs_app": "Holafly",
+      "delta_per_100": -2.5,
+      "support_level": "Directional",
+      "claim": "USim has 2.5 per-100 lower negative activation mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 10.0,
+        "ci_low": 2.79,
+        "ci_high": 30.1,
+        "n": 2
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "refund_billing",
+      "sentiment": "negative",
+      "vs_app": "Airalo",
+      "delta_per_100": 1.67,
+      "support_level": "Directional",
+      "claim": "USim has 1.7 per-100 higher negative refund_billing mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 10.0,
+        "ci_low": 2.79,
+        "ci_high": 30.1,
+        "n": 2
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "activation",
+      "sentiment": "negative",
+      "vs_app": "Airalo",
+      "delta_per_100": 1.67,
+      "support_level": "Directional",
+      "claim": "USim has 1.7 per-100 higher negative activation mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 10.0,
+        "ci_low": 2.79,
+        "ci_high": 30.1,
+        "n": 2
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    }
+  ],
+  "interventions": [
+    "Set a 4-hour first-response SLA; auto-triage tickets by theme (activation, refund) and route to a specialist queue \u2014 remove the silence that turns a resolvable issue into a one-star review.",
+    "Deploy an activation watchdog: alert ops when a QR-code scan fails twice, trigger an automated re-delivery, and send a 30-minute check-in message \u2014 eliminate silent activation failures before they become refund requests.",
+    "Automate refund-status notifications: confirm receipt within 1 hour and send a resolution update within 48 hours \u2014 silence is what escalates a delayed refund into a chargeback dispute."
+  ]
+}
