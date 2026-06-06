@@ -35,7 +35,7 @@ def phase3_outputs(tmp_path_factory):
     from agent.fixture import make_fixture_plan, make_fixture_reviews
     from agent.graph import build_graph, make_initial_state
     from agent.trace import TraceContext
-    from diagnosis import build_diagnosis, render_opener, write_outputs
+    from diagnosis import write_outputs
     from llm.stub import StubLLMClient
 
     reviews = make_fixture_reviews()
@@ -85,9 +85,7 @@ class TestNoUntaggedComparativeClaims:
             if than_re.search(line) and not tag_re.search(line):
                 violations.append(f"  line {lineno}: {line!r}")
 
-        assert not violations, (
-            "Untagged 'than' lines found in opener.md:\n" + "\n".join(violations)
-        )
+        assert not violations, "Untagged 'than' lines found in opener.md:\n" + "\n".join(violations)
 
     def test_opener_md_file_exists(self, phase3_outputs):
         assert (phase3_outputs["docs_dir"] / "opener.md").exists()
@@ -223,6 +221,7 @@ class TestLastRunJson:
 # 5. Non-trivial ordering test: synthetic dict with BOTH Supported + Directional
 # ---------------------------------------------------------------------------
 
+
 def _rate(app: str, per_100: float, n: int, ci_lo: float, ci_hi: float) -> dict:
     return {"app": app, "per_100": per_100, "ci_low": ci_lo, "ci_high": ci_hi, "n": n}
 
@@ -290,9 +289,15 @@ class TestDeltaOrderingWithMixedDeltas:
             prop = count / nobs
             lo, hi = wilson_ci(count, nobs)
             return ThemeStat(
-                app=app, theme=theme, sentiment=sentiment,
-                count=count, nobs=nobs, proportion=prop,
-                ci_low=lo, ci_high=hi, per_100=prop * 100,
+                app=app,
+                theme=theme,
+                sentiment=sentiment,
+                count=count,
+                nobs=nobs,
+                proportion=prop,
+                ci_low=lo,
+                ci_high=hi,
+                per_100=prop * 100,
             )
 
         # activation — USim 20/100 vs Airalo 5/100: CIs are disjoint → Supported
@@ -303,21 +308,26 @@ class TestDeltaOrderingWithMixedDeltas:
         airalo_supp = _ts("Airalo", "support", "negative", 6, 100)
 
         supported_delta = Delta(
-            theme="activation", sentiment="negative",
-            target=usim_act, baseline=airalo_act,
+            theme="activation",
+            sentiment="negative",
+            target=usim_act,
+            baseline=airalo_act,
             delta_per_100=usim_act.per_100 - airalo_act.per_100,
             support_level="Supported",
         )
         directional_delta = Delta(
-            theme="support", sentiment="negative",
-            target=usim_supp, baseline=airalo_supp,
+            theme="support",
+            sentiment="negative",
+            target=usim_supp,
+            baseline=airalo_supp,
             delta_per_100=usim_supp.per_100 - airalo_supp.per_100,
             support_level="Directional",
         )
 
         plan = FetchPlan(
             targets=[AppTarget(name="USim", app_store_id="x", countries=["us"])],
-            max_pages=1, enabled_sources=["appstore"],
+            max_pages=1,
+            enabled_sources=["appstore"],
         )
         # Feed deltas in WRONG order: Directional first
         state = {
@@ -335,8 +345,8 @@ class TestDeltaOrderingWithMixedDeltas:
         assert "Supported" in levels, "Expected at least one Supported delta in output"
         assert "Directional" in levels, "Expected at least one Directional delta in output"
 
-        last_supported = max(i for i, l in enumerate(levels) if l == "Supported")
-        first_directional = min(i for i, l in enumerate(levels) if l == "Directional")
+        last_supported = max(i for i, lvl in enumerate(levels) if lvl == "Supported")
+        first_directional = min(i for i, lvl in enumerate(levels) if lvl == "Directional")
         assert last_supported < first_directional, (
             f"build_diagnosis failed to reorder: Directional at {first_directional} "
             f"precedes last Supported at {last_supported}. levels={levels}"
@@ -352,8 +362,10 @@ class TestDeltaOrderingWithMixedDeltas:
         diag = _synthetic_diagnosis([directional, supported])
         levels = [d["support_level"] for d in diag["deltas"]]
 
-        last_supported = max((i for i, l in enumerate(levels) if l == "Supported"), default=-1)
-        first_directional = min((i for i, l in enumerate(levels) if l == "Directional"), default=len(levels))
+        last_supported = max((i for i, lvl in enumerate(levels) if lvl == "Supported"), default=-1)
+        first_directional = min(
+            (i for i, lvl in enumerate(levels) if lvl == "Directional"), default=len(levels)
+        )
 
         assert last_supported > first_directional, (
             "Expected a detectable ordering violation when Directional precedes Supported"
@@ -367,8 +379,10 @@ class TestDeltaOrderingWithMixedDeltas:
         diag = _synthetic_diagnosis([supported, directional])
         levels = [d["support_level"] for d in diag["deltas"]]
 
-        last_supported = max((i for i, l in enumerate(levels) if l == "Supported"), default=-1)
-        first_directional = min((i for i, l in enumerate(levels) if l == "Directional"), default=len(levels))
+        last_supported = max((i for i, lvl in enumerate(levels) if lvl == "Supported"), default=-1)
+        first_directional = min(
+            (i for i, lvl in enumerate(levels) if lvl == "Directional"), default=len(levels)
+        )
 
         assert last_supported < first_directional
 
@@ -392,11 +406,10 @@ class TestHeadlineLogic:
         )
 
         opener = render_opener(diag)
-        headline = next((l for l in opener.splitlines() if l.startswith("**")), "")
+        headline = next((ln for ln in opener.splitlines() if ln.startswith("**")), "")
         assert headline, "No bold headline found in opener"
         assert "[Supported]" in headline, (
-            f"Expected [Supported] in headline when a Supported delta exists.\n"
-            f"Got: {headline!r}"
+            f"Expected [Supported] in headline when a Supported delta exists.\nGot: {headline!r}"
         )
         assert "[Directional]" not in headline
 
@@ -411,7 +424,7 @@ class TestHeadlineLogic:
         )
 
         opener = render_opener(diag)
-        headline = next((l for l in opener.splitlines() if l.startswith("**")), "")
+        headline = next((ln for ln in opener.splitlines() if ln.startswith("**")), "")
         assert headline, "No bold headline found in opener"
         assert "[Supported]" not in headline, (
             f"Degradation headline must not claim [Supported].\nGot: {headline!r}"
@@ -421,23 +434,17 @@ class TestHeadlineLogic:
             f"Got: {headline!r}"
         )
         assert any(
-            kw in headline.lower()
-            for kw in ("no cross-company", "significance", "orientation")
-        ), (
-            f"Expected degradation language in headline.\nGot: {headline!r}"
-        )
+            kw in headline.lower() for kw in ("no cross-company", "significance", "orientation")
+        ), f"Expected degradation language in headline.\nGot: {headline!r}"
 
     def test_fixture_opener_headline_is_degradation(self, phase3_outputs):
         """The fixture corpus produces 0 Supported deltas, so its headline must be
         the honest degradation message, NOT a [Directional] claim."""
         opener_md = phase3_outputs["opener_md"]
-        headline = next(
-            (l for l in opener_md.splitlines() if l.startswith("**")), ""
-        )
+        headline = next((ln for ln in opener_md.splitlines() if ln.startswith("**")), "")
         assert headline, "No bold headline found in fixture opener"
         assert "[Directional]" not in headline, (
-            f"Fixture headline must not carry [Directional] as a finding.\n"
-            f"Got: {headline!r}"
+            f"Fixture headline must not carry [Directional] as a finding.\nGot: {headline!r}"
         )
         assert "[Supported]" not in headline, (
             "Fixture has 0 Supported deltas so headline must not claim [Supported]"

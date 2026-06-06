@@ -256,9 +256,7 @@ def render_opener(diagnosis: dict[str, Any]) -> str:
         )
     else:
         # No Supported delta: report orientation-only context without a comparative claim.
-        loudest = next(
-            (p for p in pains if p["sentiment"] in ("negative", "mixed")), None
-        )
+        loudest = next((p for p in pains if p["sentiment"] in ("negative", "mixed")), None)
         if loudest:
             usim_rate = loudest["rates"].get(target_app, {}).get("per_100", 0.0)
             n = loudest["rates"].get(target_app, {}).get("n", 0)
@@ -302,8 +300,7 @@ def render_opener(diagnosis: dict[str, Any]) -> str:
 
         # Best delta for this pain (Supported preferred, then largest |delta|)
         pain_deltas = [
-            d for d in deltas
-            if d["theme"] == p["theme"] and d["sentiment"] == p["sentiment"]
+            d for d in deltas if d["theme"] == p["theme"] and d["sentiment"] == p["sentiment"]
         ]
         pain_deltas.sort(
             key=lambda d: (d["support_level"] != "Supported", -abs(d["delta_per_100"]))
