@@ -3,40 +3,40 @@
     {
       "type": "node_enter",
       "node": "plan",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.932674+00:00",
       "fetch_loop": 0,
       "raw_reviews": 0
     },
     {
       "type": "node_exit",
       "node": "plan",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.932674+00:00",
       "latency_ms": 0.0
     },
     {
       "type": "node_enter",
       "node": "fetch",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.932674+00:00",
       "fetch_loop": 0,
       "raw_reviews": 0
     },
     {
       "type": "node_exit",
       "node": "fetch",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.932674+00:00",
       "latency_ms": 0.0
     },
     {
       "type": "node_enter",
       "node": "triage",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.932674+00:00",
       "fetch_loop": 1,
       "raw_reviews": 40
     },
     {
       "type": "node_exit",
       "node": "triage",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.932674+00:00",
       "latency_ms": 0.0,
       "decision": "classify",
       "reason": "triaged=40 >= min_n_floor=5 \u2192 proceed to classify"
@@ -44,66 +44,66 @@
     {
       "type": "node_enter",
       "node": "classify",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.932674+00:00",
       "fetch_loop": 1,
       "raw_reviews": 40
     },
     {
       "type": "node_exit",
       "node": "classify",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.937433+00:00",
       "latency_ms": 0.0
     },
     {
       "type": "node_enter",
       "node": "cluster",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.938446+00:00",
       "fetch_loop": 1,
       "raw_reviews": 40
     },
     {
       "type": "node_exit",
       "node": "cluster",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
-      "latency_ms": 0.0
+      "ts": "2026-06-06T15:15:11.939868+00:00",
+      "latency_ms": 16.0
     },
     {
       "type": "node_enter",
       "node": "quantify",
-      "ts": "2026-06-06T14:38:01.604279+00:00",
+      "ts": "2026-06-06T15:15:11.941152+00:00",
       "fetch_loop": 1,
       "raw_reviews": 40
     },
     {
       "type": "node_exit",
       "node": "quantify",
-      "ts": "2026-06-06T14:38:03.563544+00:00",
-      "latency_ms": 1953.0
+      "ts": "2026-06-06T15:15:13.844205+00:00",
+      "latency_ms": 1890.0
     },
     {
       "type": "node_enter",
       "node": "diagnose",
-      "ts": "2026-06-06T14:38:03.566313+00:00",
+      "ts": "2026-06-06T15:15:13.844205+00:00",
       "fetch_loop": 1,
       "raw_reviews": 40
     },
     {
       "type": "node_exit",
       "node": "diagnose",
-      "ts": "2026-06-06T14:38:03.566313+00:00",
+      "ts": "2026-06-06T15:15:13.844205+00:00",
       "latency_ms": 0.0
     },
     {
       "type": "node_enter",
       "node": "critique",
-      "ts": "2026-06-06T14:38:03.566313+00:00",
+      "ts": "2026-06-06T15:15:13.844205+00:00",
       "fetch_loop": 1,
       "raw_reviews": 40
     },
     {
       "type": "node_exit",
       "node": "critique",
-      "ts": "2026-06-06T14:38:03.566313+00:00",
+      "ts": "2026-06-06T15:15:13.844205+00:00",
       "latency_ms": 0.0,
       "decision": "end",
       "reason": "critique accepted \u2014 claims meet quality bar or loop limit reached"
@@ -127,11 +127,11 @@
       "tool_calls": 0
     },
     "cluster": {
-      "latency_ms": 0.0,
+      "latency_ms": 16.0,
       "tool_calls": 0
     },
     "quantify": {
-      "latency_ms": 1953.0,
+      "latency_ms": 1890.0,
       "tool_calls": 0
     },
     "diagnose": {

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-06T14:38:03.566313+00:00",
+  "generated_at": "2026-06-06T15:15:13.845717+00:00",
   "recency_window": 12,
   "total_n": 40,
   "per_source_n": {
@@ -362,12 +362,12 @@
   ],
   "deltas": [
     {
-      "theme": "support",
-      "sentiment": "neutral",
+      "theme": "positive",
+      "sentiment": "positive",
       "vs_app": "Holafly",
       "delta_per_100": -7.5,
       "support_level": "Directional",
-      "claim": "USim has 7.5 per-100 lower neutral support mentions than Holafly (Directional).",
+      "claim": "USim has 7.5 per-100 lower positive mentions than Holafly (Directional).",
       "target": {
         "app": "USim",
         "per_100": 5.0,
@@ -406,12 +406,12 @@
       }
     },
     {
-      "theme": "positive",
-      "sentiment": "positive",
+      "theme": "coverage_speed",
+      "sentiment": "negative",
       "vs_app": "Holafly",
       "delta_per_100": -7.5,
       "support_level": "Directional",
-      "claim": "USim has 7.5 per-100 lower positive mentions than Holafly (Directional).",
+      "claim": "USim has 7.5 per-100 lower negative coverage_speed mentions than Holafly (Directional).",
       "target": {
         "app": "USim",
         "per_100": 5.0,
@@ -428,12 +428,12 @@
       }
     },
     {
-      "theme": "coverage_speed",
-      "sentiment": "negative",
+      "theme": "activation",
+      "sentiment": "neutral",
       "vs_app": "Holafly",
       "delta_per_100": -7.5,
       "support_level": "Directional",
-      "claim": "USim has 7.5 per-100 lower negative coverage_speed mentions than Holafly (Directional).",
+      "claim": "USim has 7.5 per-100 lower neutral activation mentions than Holafly (Directional).",
       "target": {
         "app": "USim",
         "per_100": 5.0,
@@ -472,12 +472,12 @@
       }
     },
     {
-      "theme": "activation",
+      "theme": "support",
       "sentiment": "neutral",
       "vs_app": "Holafly",
       "delta_per_100": -7.5,
       "support_level": "Directional",
-      "claim": "USim has 7.5 per-100 lower neutral activation mentions than Holafly (Directional).",
+      "claim": "USim has 7.5 per-100 lower neutral support mentions than Holafly (Directional).",
       "target": {
         "app": "USim",
         "per_100": 5.0,
@@ -538,72 +538,6 @@
       }
     },
     {
-      "theme": "coverage_speed",
-      "sentiment": "neutral",
-      "vs_app": "Airalo",
-      "delta_per_100": -3.33,
-      "support_level": "Directional",
-      "claim": "USim has 3.3 per-100 lower neutral coverage_speed mentions than Airalo (Directional).",
-      "target": {
-        "app": "USim",
-        "per_100": 5.0,
-        "ci_low": 0.89,
-        "ci_high": 23.61,
-        "n": 1
-      },
-      "baseline": {
-        "app": "Airalo",
-        "per_100": 8.33,
-        "ci_low": 1.49,
-        "ci_high": 35.39,
-        "n": 1
-      }
-    },
-    {
-      "theme": "value_pricing",
-      "sentiment": "positive",
-      "vs_app": "Airalo",
-      "delta_per_100": -3.33,
-      "support_level": "Directional",
-      "claim": "USim has 3.3 per-100 lower positive value_pricing mentions than Airalo (Directional).",
-      "target": {
-        "app": "USim",
-        "per_100": 5.0,
-        "ci_low": 0.89,
-        "ci_high": 23.61,
-        "n": 1
-      },
-      "baseline": {
-        "app": "Airalo",
-        "per_100": 8.33,
-        "ci_low": 1.49,
-        "ci_high": 35.39,
-        "n": 1
-      }
-    },
-    {
-      "theme": "positive",
-      "sentiment": "negative",
-      "vs_app": "Airalo",
-      "delta_per_100": -3.33,
-      "support_level": "Directional",
-      "claim": "USim has 3.3 per-100 lower negative positive mentions than Airalo (Directional).",
-      "target": {
-        "app": "USim",
-        "per_100": 5.0,
-        "ci_low": 0.89,
-        "ci_high": 23.61,
-        "n": 1
-      },
-      "baseline": {
-        "app": "Airalo",
-        "per_100": 8.33,
-        "ci_low": 1.49,
-        "ci_high": 35.39,
-        "n": 1
-      }
-    },
-    {
       "theme": "app_ux",
       "sentiment": "negative",
       "vs_app": "Airalo",
@@ -648,12 +582,56 @@
       }
     },
     {
+      "theme": "coverage_speed",
+      "sentiment": "neutral",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower neutral coverage_speed mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
       "theme": "app_ux",
       "sentiment": "neutral",
       "vs_app": "Airalo",
       "delta_per_100": -3.33,
       "support_level": "Directional",
       "claim": "USim has 3.3 per-100 lower neutral app_ux mentions than Airalo (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
+      },
+      "baseline": {
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
+        "n": 1
+      }
+    },
+    {
+      "theme": "positive",
+      "sentiment": "negative",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
+      "support_level": "Directional",
+      "claim": "USim has 3.3 per-100 lower negative positive mentions than Airalo (Directional).",
       "target": {
         "app": "USim",
         "per_100": 5.0,
@@ -692,24 +670,24 @@
       }
     },
     {
-      "theme": "refund_billing",
-      "sentiment": "negative",
-      "vs_app": "Holafly",
-      "delta_per_100": -2.5,
+      "theme": "value_pricing",
+      "sentiment": "positive",
+      "vs_app": "Airalo",
+      "delta_per_100": -3.33,
       "support_level": "Directional",
-      "claim": "USim has 2.5 per-100 lower negative refund_billing mentions than Holafly (Directional).",
+      "claim": "USim has 3.3 per-100 lower positive value_pricing mentions than Airalo (Directional).",
       "target": {
         "app": "USim",
-        "per_100": 10.0,
-        "ci_low": 2.79,
-        "ci_high": 30.1,
-        "n": 2
+        "per_100": 5.0,
+        "ci_low": 0.89,
+        "ci_high": 23.61,
+        "n": 1
       },
       "baseline": {
-        "app": "Holafly",
-        "per_100": 12.5,
-        "ci_low": 2.24,
-        "ci_high": 47.09,
+        "app": "Airalo",
+        "per_100": 8.33,
+        "ci_low": 1.49,
+        "ci_high": 35.39,
         "n": 1
       }
     },
@@ -738,10 +716,32 @@
     {
       "theme": "refund_billing",
       "sentiment": "negative",
+      "vs_app": "Holafly",
+      "delta_per_100": -2.5,
+      "support_level": "Directional",
+      "claim": "USim has 2.5 per-100 lower negative refund_billing mentions than Holafly (Directional).",
+      "target": {
+        "app": "USim",
+        "per_100": 10.0,
+        "ci_low": 2.79,
+        "ci_high": 30.1,
+        "n": 2
+      },
+      "baseline": {
+        "app": "Holafly",
+        "per_100": 12.5,
+        "ci_low": 2.24,
+        "ci_high": 47.09,
+        "n": 1
+      }
+    },
+    {
+      "theme": "activation",
+      "sentiment": "negative",
       "vs_app": "Airalo",
       "delta_per_100": 1.67,
       "support_level": "Directional",
-      "claim": "USim has 1.7 per-100 higher negative refund_billing mentions than Airalo (Directional).",
+      "claim": "USim has 1.7 per-100 higher negative activation mentions than Airalo (Directional).",
       "target": {
         "app": "USim",
         "per_100": 10.0,
@@ -758,12 +758,12 @@
       }
     },
     {
-      "theme": "activation",
+      "theme": "refund_billing",
       "sentiment": "negative",
       "vs_app": "Airalo",
       "delta_per_100": 1.67,
       "support_level": "Directional",
-      "claim": "USim has 1.7 per-100 higher negative activation mentions than Airalo (Directional).",
+      "claim": "USim has 1.7 per-100 higher negative refund_billing mentions than Airalo (Directional).",
       "target": {
         "app": "USim",
         "per_100": 10.0,

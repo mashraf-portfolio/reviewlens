@@ -21,7 +21,7 @@ test:
 	$(PYTHON) -m pytest
 
 lint:
-	$(PYTHON) -m ruff check $(SRC) tests
+	$(PYTHON) -m ruff check $(SRC) app tests
 
 fmt:
-	$(PYTHON) -m ruff format $(SRC) tests
+	$(PYTHON) -m ruff format $(SRC) app tests
