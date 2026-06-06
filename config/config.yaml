@@ -1,0 +1,42 @@
+sources:
+  - name: appstore
+    enabled: true
+  - name: playstore
+    enabled: true
+  - name: trustpilot
+    enabled: false          # requires TRUSTPILOT_API_KEY in .env
+
+# App Store country codes
+storefronts:
+  - us
+  - gb
+  - ca
+  - au
+  - in
+
+max_fetch_loops: 10
+min_n_floor: 30
+recency_window_months: 12
+cost_ceiling_usd: 8.0
+
+models:
+  planner: "<sonnet-model-id>"
+  classifier: "<haiku-model-id>"
+  synth: "<sonnet-model-id>"
+
+taxonomy_seed:
+  themes:
+    activation:
+      description: "Friction or success during sign-up, onboarding, and first use."
+    support:
+      description: "Experiences with customer service, response times, and issue resolution."
+    refund_billing:
+      description: "Complaints or praise about charges, refunds, and billing accuracy."
+    coverage_speed:
+      description: "Network coverage quality, data speeds, and call reliability."
+    app_ux:
+      description: "Usability, design, performance, and bugs in the mobile app."
+    value_pricing:
+      description: "Perceived value for money, plan pricing, and competitor comparisons."
+    positive:
+      description: "General positive sentiment not attributable to a specific theme."

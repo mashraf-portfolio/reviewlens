@@ -1,0 +1,6 @@
+# Ignore all raw cache files but keep results/
+raw_cache/*
+
+# Keep the results directory
+!results/
+!results/.gitkeep
