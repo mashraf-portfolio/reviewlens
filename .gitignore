@@ -41,3 +41,5 @@ Thumbs.db
 
 # Data — raw cache is gitignored, results are kept
 data/raw_cache/
+
+.claude/
