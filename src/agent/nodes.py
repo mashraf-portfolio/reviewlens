@@ -1,110 +1,297 @@
-"""LangGraph node functions — exactly 8 nodes per §2.1 of the design doc.
+"""LangGraph node functions — 8 nodes per design doc §2.1.
 
-Node order:
+Nodes are plain functions; the LLM client and config values are injected via
+the build_graph() closure so tests can swap in StubLLMClient and pass plain
+config values without touching get_settings() at all.
+
+Topology:
     plan → fetch → triage → classify → cluster → quantify → diagnose → critique
-
-Conditional edges:
-    triage  → classify  (enough usable reviews)
-            → fetch     (retry: insufficient data after filtering)
-    critique → END      (report meets quality bar)
-             → fetch    (retry: hallucination or low-confidence synthesis detected)
-
-Both retry paths are bounded by max_fetch_loops and CostMeter.ceiling_usd.
+                      ↑          │                                          │
+                      └──fetch───┘ (too few reviews)           END / fetch ─┘
 """
 
+from __future__ import annotations
 
-def plan_node(state):
-    """Build a run plan: resolve storefronts, date windows, and taxonomy to use.
+import logging
+from datetime import UTC, datetime, timedelta
 
-    TODO:
-    - Call LLMClient with config.models.planner to produce a RunPlan
-    - Validate plan against config constraints (storefronts, recency_window_months)
-    - Store plan in state.run_plan
-    """
-    raise NotImplementedError
+from agent.state import (
+    CritiqueResult,
+    DiagnosisClaim,
+    GraphState,
+)
+from agent.trace import TraceContext
+from sources.models import FetchPlan
+from tools.fetch import fetch_reviews
 
-
-def fetch_node(state):
-    """Fetch raw reviews from all enabled sources for the current plan.
-
-    TODO:
-    - Call sources.registry.get_sources(config) for each enabled source
-    - Merge new results into state.raw_reviews, deduplicating by review ID
-    - Increment state.fetch_loop_count; raise if > config.max_fetch_loops
-    - Check CostMeter has budget remaining before proceeding
-    """
-    raise NotImplementedError
+log = logging.getLogger(__name__)
 
 
-def triage_node(state):
-    """Filter and quality-gate the fetched reviews; decide whether to proceed.
-
-    TODO:
-    - Apply recency_window_months cutoff
-    - Remove duplicates and spam/bot reviews
-    - Return routing signal: "classify" if len >= min_n_floor, else "fetch"
-    - Store filtered reviews in state.triaged_reviews
-    """
-    raise NotImplementedError
+# ---------------------------------------------------------------------------
+# plan_node
+# ---------------------------------------------------------------------------
 
 
-def classify_node(state):
-    """Classify each triaged review against the taxonomy themes.
+def make_plan_node(tracer: TraceContext):
+    def plan_node(state: GraphState) -> dict:
+        tracer.node_enter("plan", state)
 
-    TODO:
-    - Use LLMClient with config.models.classifier
-    - Batch reviews to stay under token limits
-    - Use structured_output() to produce ClassifiedReview(review_id, themes, sentiment)
-    - Store results in state.classified
-    """
-    raise NotImplementedError
+        # If a plan is already in state (fixture / test mode), keep it.
+        plan = state.get("fetch_plan")
+        if plan is None:
+            from config import get_settings
+            from sources.registry import resolve_all
 
+            cfg = get_settings()
+            targets, _log = resolve_all(cfg.storefronts)
+            plan = FetchPlan(
+                targets=targets,
+                max_pages=cfg.max_fetch_loops,
+                enabled_sources=[s.name for s in cfg.sources if s.enabled],
+            )
 
-def cluster_node(state):
-    """Group classified reviews into named theme clusters.
+        tracer.node_exit("plan", state)
+        return {"fetch_plan": plan}
 
-    TODO:
-    - Group ClassifiedReviews by primary theme
-    - Sub-cluster by semantic similarity within each theme
-    - Assign a short human-readable label to each cluster
-    - Produce list[Cluster(theme, label, review_ids, representative_quotes)]
-    - Store results in state.clusters
-    """
-    raise NotImplementedError
-
-
-def quantify_node(state):
-    """Compute statistical significance of cluster volume changes over time.
-
-    TODO:
-    - Use statsmodels proportion z-test or chi-squared on theme counts
-    - Compare current recency_window vs prior equal-length window
-    - Produce QuantStats(theme, count, pct, delta_pct, p_value, significant)
-    - Store results in state.stats
-    """
-    raise NotImplementedError
+    return plan_node
 
 
-def diagnose_node(state):
-    """Run pipeline diagnostics and surface coverage/quality warnings.
-
-    TODO:
-    - Call diagnosis.coverage_check for storefronts below min_n_floor
-    - Call diagnosis.theme_distribution to detect collapsed/skewed taxonomy
-    - Attach DiagnosticsReport to state.diagnostics
-    - Log warnings but do not abort — critique_node decides retry
-    """
-    raise NotImplementedError
+# ---------------------------------------------------------------------------
+# fetch_node
+# ---------------------------------------------------------------------------
 
 
-def critique_node(state):
-    """Self-critique the synthesised report; decide whether to accept or retry.
+def make_fetch_node(tracer: TraceContext):
+    def fetch_node(state: GraphState) -> dict:
+        tracer.node_enter("fetch", state)
 
-    TODO:
-    - Use LLMClient with config.models.synth to score the draft report
-    - Check for hallucinations, unsupported claims, and low-confidence themes
-    - Return routing signal: "end" if quality bar met, else "fetch" to retry
-    - On "fetch" retry, attach critique notes to state for plan_node context
-    - Increment and check fetch_loop_count + CostMeter before allowing retry
-    """
-    raise NotImplementedError
+        loop = state.get("fetch_loop_count", 0)
+        plan = state["fetch_plan"]
+
+        # Check budget before fetching
+        meter = state.get("cost_meter")
+        if meter is not None:
+            from llm.client import BudgetExceeded
+
+            try:
+                meter.record("fetch", 0, 0)  # zero-cost check — raises if already over
+            except BudgetExceeded as exc:
+                log.warning("fetch_node: %s — halting", exc)
+                tracer.node_exit("fetch", state)
+                # Force critique to END by setting a high loop count
+                return {"fetch_loop_count": state.get("min_n_floor", 30) * 99}
+
+        # Use pre-loaded fixture reviews when available (first loop only)
+        fixture = state.get("_fixture_reviews", [])
+        if fixture and loop == 0:
+            new_reviews = fixture
+            log.info("fetch_node: using %d fixture reviews (offline mode)", len(new_reviews))
+        else:
+            new_reviews, counts = fetch_reviews(plan)
+            log.info("fetch_node: fetched %d reviews %s", len(new_reviews), counts)
+
+        tracer.node_exit("fetch", state)
+        return {
+            "raw_reviews": new_reviews,
+            "fetch_loop_count": loop + 1,
+        }
+
+    return fetch_node
+
+
+# ---------------------------------------------------------------------------
+# triage_node
+# ---------------------------------------------------------------------------
+
+
+def make_triage_node(tracer: TraceContext, recency_window_months: int = 12):
+    def triage_node(state: GraphState) -> dict:
+        tracer.node_enter("triage", state)
+
+        reviews = state.get("raw_reviews", [])
+        min_n = state.get("min_n_floor", 30)
+        max_loops = state["fetch_plan"].max_pages  # reuse max_pages as loop cap
+
+        cutoff = datetime.now(UTC) - timedelta(days=recency_window_months * 30)
+        triaged = [r for r in reviews if r.date >= cutoff]
+
+        decision: str
+        loop = state.get("fetch_loop_count", 0)
+        if len(triaged) >= min_n:
+            decision = "classify"
+        elif loop >= max_loops:
+            log.warning(
+                "triage: max_fetch_loops=%d reached with only %d reviews — forcing classify",
+                max_loops,
+                len(triaged),
+            )
+            decision = "classify"
+        else:
+            decision = "fetch"
+
+        tracer.node_exit("triage", {**state, "triaged_reviews": triaged}, decision=decision)
+        return {"triaged_reviews": triaged, "triage_decision": decision}
+
+    return triage_node
+
+
+# ---------------------------------------------------------------------------
+# classify_node
+# ---------------------------------------------------------------------------
+
+
+def make_classify_node(tracer: TraceContext, llm: object, taxonomy_themes: list[str]):
+    def classify_node(state: GraphState) -> dict:
+        tracer.node_enter("classify", state)
+
+        from tools.classify import classify_reviews
+
+        reviews = state.get("triaged_reviews", [])
+        classified, low_conf = classify_reviews(reviews, taxonomy_themes, llm)
+
+        log.info("classify: %d rows, %d low-confidence", len(classified), low_conf)
+        tracer.node_exit("classify", state)
+        return {"classified": classified, "low_confidence_count": low_conf}
+
+    return classify_node
+
+
+# ---------------------------------------------------------------------------
+# cluster_node
+# ---------------------------------------------------------------------------
+
+
+def make_cluster_node(tracer: TraceContext, llm: object, seed_themes: list[str]):
+    def cluster_node(state: GraphState) -> dict:
+        tracer.node_enter("cluster", state)
+
+        from tools.cluster import apply_theme_map, cluster_themes
+
+        classified = state.get("classified", [])
+        theme_map = cluster_themes(classified, seed_themes, llm)
+        normalised = apply_theme_map(classified, theme_map)
+
+        log.info("cluster: mapped %d unique themes", len(theme_map))
+        tracer.node_exit("cluster", state)
+        return {"classified": normalised, "theme_map": theme_map}
+
+    return cluster_node
+
+
+# ---------------------------------------------------------------------------
+# quantify_node
+# ---------------------------------------------------------------------------
+
+
+def make_quantify_node(tracer: TraceContext):
+    def quantify_node(state: GraphState) -> dict:
+        tracer.node_enter("quantify", state)
+
+        from tools.quantify import compute_stats
+
+        classified = state.get("classified", [])
+        min_n = state.get("min_n_floor", 30)
+        target_app = state["fetch_plan"].targets[0].name
+
+        stats, deltas = compute_stats(classified, min_n_floor=min_n, target_app=target_app)
+        supported = sum(1 for d in deltas if d.support_level == "Supported")
+        log.info("quantify: %d stats, %d deltas (%d supported)", len(stats), len(deltas), supported)
+
+        tracer.node_exit("quantify", state)
+        return {"stats": stats, "deltas": deltas}
+
+    return quantify_node
+
+
+# ---------------------------------------------------------------------------
+# diagnose_node
+# ---------------------------------------------------------------------------
+
+
+def make_diagnose_node(tracer: TraceContext):
+    def diagnose_node(state: GraphState) -> dict:
+        tracer.node_enter("diagnose", state)
+
+        from agent.state import DiagnosisClaim
+
+        deltas = state.get("deltas", [])
+        claims: list[DiagnosisClaim] = []
+        for delta in deltas:
+            direction = "higher" if delta.delta_per_100 > 0 else "lower"
+            # Avoid "positive positive" when theme and sentiment share the same label.
+            mention = (
+                delta.theme
+                if delta.theme == delta.sentiment
+                else f"{delta.sentiment} {delta.theme}"
+            )
+            claim_text = (
+                f"{delta.target.app} has {abs(delta.delta_per_100):.1f} per-100 "
+                f"{direction} {mention} mentions than "
+                f"{delta.baseline.app} ({delta.support_level})."
+            )
+            claims.append(
+                DiagnosisClaim(
+                    app=delta.target.app,
+                    vs_app=delta.baseline.app,
+                    theme=delta.theme,
+                    sentiment=delta.sentiment,
+                    claim=claim_text,
+                    delta_per_100=delta.delta_per_100,
+                    support_level=delta.support_level,
+                    evidence=delta,
+                )
+            )
+
+        log.info("diagnose: %d claims", len(claims))
+        tracer.node_exit("diagnose", state)
+        return {"claims": claims}
+
+    return diagnose_node
+
+
+# ---------------------------------------------------------------------------
+# critique_node
+# ---------------------------------------------------------------------------
+
+
+def make_critique_node(tracer: TraceContext, llm: object):
+    def critique_node(state: GraphState) -> dict:
+        tracer.node_enter("critique", state)
+
+        from agent.state import CritiqueResult
+
+        loop = state.get("fetch_loop_count", 0)
+        max_loops = state["fetch_plan"].max_pages
+        classified = state.get("classified", [])
+        low_conf = state.get("low_confidence_count", 0)
+        total = len(classified) or 1
+
+        # Hard stops — don't call LLM
+        if loop >= max_loops:
+            decision = "end"
+            tracer.node_exit("critique", state, decision=decision)
+            return {"critique_decision": decision}
+
+        # LLM soft critique
+        low_conf_rate = low_conf / total
+        claims_text = "\n".join(c.claim for c in state.get("claims", [])[:10])
+        prompt = (
+            f"Low-confidence rate: {low_conf_rate:.1%}\n"
+            f"Claims:\n{claims_text}\n\n"
+            "Should we accept these results or retry with more data?"
+        )
+        try:
+            result: CritiqueResult = llm.structured_output(  # type: ignore[union-attr]
+                CritiqueResult,
+                [{"role": "user", "content": prompt}],
+                max_tokens=256,
+            )
+            decision = "end" if result.accept else "fetch"
+        except Exception as exc:
+            log.warning("critique LLM call failed: %s — defaulting to end", exc)
+            decision = "end"
+
+        tracer.node_exit("critique", state, decision=decision)
+        return {"critique_decision": decision}
+
+    return critique_node
