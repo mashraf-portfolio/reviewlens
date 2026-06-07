@@ -64,6 +64,21 @@ _FALLBACK_INTERVENTION = (
 
 
 # ---------------------------------------------------------------------------
+# Shared pain-cell predicate
+# ---------------------------------------------------------------------------
+
+
+def _is_pain_cell(theme: str, sentiment: str) -> bool:
+    """True when the (theme, sentiment) cell qualifies as a pain.
+
+    The "positive" theme is a praise-bucket, not a pain.  Positive-sentiment
+    cells are never pains regardless of theme.  Single source of truth used by
+    both the pains list and the deltas list so they cannot drift apart.
+    """
+    return theme != "positive" and sentiment in ("negative", "mixed")
+
+
+# ---------------------------------------------------------------------------
 # build_diagnosis
 # ---------------------------------------------------------------------------
 
@@ -117,6 +132,8 @@ def build_diagnosis(state: dict[str, Any]) -> dict[str, Any]:
     for (theme, sentiment), app_rates in cell_stats.items():
         if target_app not in app_rates:
             continue
+        if not _is_pain_cell(theme, sentiment):
+            continue
         usim_rate = app_rates[target_app]["per_100"]
         all_rates = [v["per_100"] for v in app_rates.values()]
         field_med = round(median(all_rates), 2)
@@ -137,13 +154,14 @@ def build_diagnosis(state: dict[str, Any]) -> dict[str, Any]:
     for c in claims:
         claim_index[(c.theme, c.sentiment, c.vs_app)] = c.claim
 
+    pain_deltas = [d for d in deltas if _is_pain_cell(d.theme, d.sentiment)]
     supported_d = sorted(
-        [d for d in deltas if d.support_level == "Supported"],
+        [d for d in pain_deltas if d.support_level == "Supported"],
         key=lambda d: abs(d.delta_per_100),
         reverse=True,
     )
     directional_d = sorted(
-        [d for d in deltas if d.support_level == "Directional"],
+        [d for d in pain_deltas if d.support_level == "Directional"],
         key=lambda d: abs(d.delta_per_100),
         reverse=True,
     )
@@ -190,16 +208,104 @@ def build_diagnosis(state: dict[str, Any]) -> dict[str, Any]:
 
     interventions = [_INTERVENTION_COPY.get(t, _FALLBACK_INTERVENTION) for t in top_themes[:3]]
 
+    min_n_floor = state.get("min_n_floor", 30)
+
     return {
         "generated_at": datetime.now(UTC).isoformat(),
         "recency_window": 12,
         "total_n": total_n,
         "per_source_n": dict(per_source_n),
         "target_app": target_app,
+        "min_n_floor": min_n_floor,
         "pains": pains,
         "deltas": ordered_deltas,
         "interventions": interventions,
     }
+
+
+# ---------------------------------------------------------------------------
+# rediagnose — iterate the diagnosis layer without re-running the pipeline
+# ---------------------------------------------------------------------------
+
+
+def _recompute_support_level(
+    target: dict[str, Any], baseline: dict[str, Any], min_n_floor: int
+) -> str:
+    """Recompute Supported/Directional from saved rate dicts (ci_low/ci_high stored as percent)."""
+    if target["n"] < min_n_floor or baseline["n"] < min_n_floor:
+        return "Directional"
+    # CIs stored as percentages; disjoint check is scale-invariant
+    if target["ci_high"] < baseline["ci_low"] or baseline["ci_high"] < target["ci_low"]:
+        return "Supported"
+    return "Directional"
+
+
+def rediagnose(saved_diagnosis: dict[str, Any], min_n_floor: int | None = None) -> dict[str, Any]:
+    """Re-apply filtering, recompute Supported/Directional at a new floor, rebuild
+    interventions — all from a saved diagnosis dict, no pipeline re-run.
+
+    Args:
+        saved_diagnosis: Dict from data/results/last_run.json.
+        min_n_floor:     Override the floor threshold.  If None, falls back to
+                         saved_diagnosis["min_n_floor"] or 30.
+
+    Returns a corrected diagnosis dict ready to pass to render_opener().
+    """
+    import copy
+
+    diag = copy.deepcopy(saved_diagnosis)
+    diag.pop("opener_md", None)  # present in last_run.json, not in diagnosis dict
+
+    if min_n_floor is None:
+        min_n_floor = saved_diagnosis.get("min_n_floor", 30)
+    diag["min_n_floor"] = min_n_floor
+
+    # Re-apply the current pains filter (positive theme/sentiment is not a pain)
+    diag["pains"] = [
+        p
+        for p in diag.get("pains", [])
+        if p["theme"] != "positive" and p["sentiment"] not in ("positive",)
+    ]
+
+    # Recompute support_level for every delta at the new floor; update embedded claim text
+    for d in diag.get("deltas", []):
+        new_level = _recompute_support_level(d["target"], d["baseline"], min_n_floor)
+        if new_level != d["support_level"]:
+            d["claim"] = d["claim"].replace(f"({d['support_level']})", f"({new_level})")
+            d["support_level"] = new_level
+
+    # Drop any delta that is not a pain cell (positive theme or positive sentiment)
+    diag["deltas"] = [d for d in diag["deltas"] if _is_pain_cell(d["theme"], d["sentiment"])]
+
+    # Reorder deltas: Supported first (by |delta| desc), then Directional
+    supported_d = sorted(
+        [d for d in diag["deltas"] if d["support_level"] == "Supported"],
+        key=lambda d: abs(d["delta_per_100"]),
+        reverse=True,
+    )
+    directional_d = sorted(
+        [d for d in diag["deltas"] if d["support_level"] == "Directional"],
+        key=lambda d: abs(d["delta_per_100"]),
+        reverse=True,
+    )
+    diag["deltas"] = supported_d + directional_d
+
+    # Recompute interventions from filtered pains
+    top_themes: list[str] = []
+    for p in diag["pains"]:
+        if p["sentiment"] in ("negative", "mixed") and p["theme"] not in top_themes:
+            top_themes.append(p["theme"])
+        if len(top_themes) == 3:
+            break
+    for theme in ("activation", "support", "refund_billing"):
+        if theme not in top_themes and len(top_themes) < 3:
+            top_themes.append(theme)
+    diag["interventions"] = [
+        _INTERVENTION_COPY.get(t, _FALLBACK_INTERVENTION) for t in top_themes[:3]
+    ]
+
+    diag["generated_at"] = datetime.now(UTC).isoformat()
+    return diag
 
 
 # ---------------------------------------------------------------------------
@@ -220,6 +326,7 @@ def render_opener(diagnosis: dict[str, Any]) -> str:
     total_n = diagnosis.get("total_n", 0)
     recency_window = diagnosis.get("recency_window", 12)
     per_source_n = diagnosis.get("per_source_n", {})
+    min_n_floor = diagnosis.get("min_n_floor", 30)
 
     competitor_apps = sorted({d["vs_app"] for d in deltas})
     n_competitors = len(competitor_apps)
@@ -406,7 +513,7 @@ def render_opener(diagnosis: dict[str, Any]) -> str:
         f"recency window {recency_window} months; "
         f"competitors benchmarked: {comp_list}. "
         f"All rates per-100 reviews with 95% Wilson CIs. "
-        f"Supported = both samples ≥ n-floor AND CIs non-overlapping; "
+        f"Supported = both samples ≥ {min_n_floor} reviews AND CIs non-overlapping; "
         f"Directional = otherwise (thin sample or overlapping intervals).*"
     )
 

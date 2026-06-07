@@ -60,13 +60,17 @@ def run_live() -> None:
     """Run the full graph with real LLM and live sources."""
     from agent.graph import build_graph, make_initial_state
     from agent.trace import TraceContext
+    from config import get_settings
     from diagnosis import write_outputs
+    from llm.client import CostMeter
 
     print("ReviewLens -- live run")
+    cfg = get_settings()
+    shared_meter = CostMeter(ceiling_usd=cfg.cost_ceiling_usd)
     tracer = TraceContext(output_path=_RESULTS_DIR / "trace_last_run.json")
 
-    graph = build_graph(tracer=tracer)
-    initial = make_initial_state()
+    graph = build_graph(tracer=tracer, cost_meter=shared_meter)
+    initial = make_initial_state(cost_meter=shared_meter)
 
     with tracer:
         state = graph.invoke(initial)
@@ -81,6 +85,9 @@ def _print_summary(state: dict, diagnosis: dict) -> None:
     deltas = diagnosis.get("deltas", [])
     supported = sum(1 for d in deltas if d["support_level"] == "Supported")
 
+    meter = state.get("cost_meter")
+    cost_str = f"${meter.total_usd:.4f}" if meter is not None else "n/a"
+
     print(f"\n{'=' * 60}")
     print("ReviewLens run complete")
     print(f"{'=' * 60}")
@@ -88,6 +95,7 @@ def _print_summary(state: dict, diagnosis: dict) -> None:
     print(f"  pains identified   : {len(pains)}")
     print(f"  deltas             : {len(deltas)} ({supported} Supported)")
     print(f"  interventions      : {len(diagnosis.get('interventions', []))}")
+    print(f"  LLM cost           : {cost_str}")
     print("")
     print("  docs/diagnosis.json                  written")
     print("  docs/opener.md                       written")

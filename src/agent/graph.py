@@ -40,6 +40,7 @@ def build_graph(
     tracer: TraceContext | None = None,
     recency_window_months: int = 12,
     taxonomy_themes: list[str] | None = None,
+    cost_meter=None,
 ):
     """Compile and return the LangGraph StateGraph.
 
@@ -55,15 +56,33 @@ def build_graph(
     if tracer is None:
         tracer = TraceContext()
 
+    # classify_llm uses the low-cost Haiku model (high-volume per-review work).
+    # synth_llm uses the Opus model (low-volume judgment: cluster, critique).
+    # In stub/test mode a single llm object is reused for all nodes.
+    classify_llm: object
+    synth_llm: object
+
     if llm is None:
         from config import get_settings
-        from llm.client import LLMClient
+        from llm.client import CostMeter, LLMClient
 
         cfg = get_settings()
-        llm = LLMClient()
+        shared_meter = (
+            cost_meter if cost_meter is not None else CostMeter(ceiling_usd=cfg.cost_ceiling_usd)
+        )
+        classify_llm = LLMClient(
+            model=cfg.models.get("classifier", "claude-haiku-4-5-20251001"),
+            cost_meter=shared_meter,
+        )
+        synth_llm = LLMClient(
+            model=cfg.models.get("synth", "claude-opus-4-8"),
+            cost_meter=shared_meter,
+        )
         recency_window_months = cfg.recency_window_months
         taxonomy_themes = list(cfg.taxonomy_seed.get("themes", {}).keys()) or _DEFAULT_THEMES
     else:
+        classify_llm = llm
+        synth_llm = llm
         if taxonomy_themes is None:
             taxonomy_themes = _DEFAULT_THEMES
 
@@ -83,11 +102,11 @@ def build_graph(
     workflow.add_node("plan", make_plan_node(tracer))
     workflow.add_node("fetch", make_fetch_node(tracer))
     workflow.add_node("triage", make_triage_node(tracer, recency_window_months))
-    workflow.add_node("classify", make_classify_node(tracer, llm, taxonomy_themes))
-    workflow.add_node("cluster", make_cluster_node(tracer, llm, taxonomy_themes))
+    workflow.add_node("classify", make_classify_node(tracer, classify_llm, taxonomy_themes))
+    workflow.add_node("cluster", make_cluster_node(tracer, synth_llm, taxonomy_themes))
     workflow.add_node("quantify", make_quantify_node(tracer))
     workflow.add_node("diagnose", make_diagnose_node(tracer))
-    workflow.add_node("critique", make_critique_node(tracer, llm))
+    workflow.add_node("critique", make_critique_node(tracer, synth_llm))
 
     workflow.set_entry_point("plan")
     workflow.add_edge("plan", "fetch")
@@ -123,6 +142,7 @@ def make_initial_state(
     fetch_plan=None,
     min_n_floor: int = 30,
     cost_ceiling_usd: float = 8.0,
+    cost_meter=None,
 ) -> GraphState:
     from llm.client import CostMeter
 
@@ -139,7 +159,9 @@ def make_initial_state(
         claims=[],
         trace_entries=[],
         fetch_loop_count=0,
-        cost_meter=CostMeter(ceiling_usd=cost_ceiling_usd),
+        cost_meter=cost_meter
+        if cost_meter is not None
+        else CostMeter(ceiling_usd=cost_ceiling_usd),
         min_n_floor=min_n_floor,
         triage_decision="classify",
         critique_decision="end",

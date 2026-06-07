@@ -24,7 +24,7 @@ class SourceConfig(BaseModel):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
+        env_file=str(_CONFIG_PATH.parent.parent / ".env"),  # project root, not CWD
         env_file_encoding="utf-8",
         extra="ignore",
     )

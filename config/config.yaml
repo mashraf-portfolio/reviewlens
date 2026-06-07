@@ -15,14 +15,14 @@ storefronts:
   - in
 
 max_fetch_loops: 10
-min_n_floor: 30
+min_n_floor: 15
 recency_window_months: 12
 cost_ceiling_usd: 8.0
 
 models:
-  planner: "<sonnet-model-id>"
-  classifier: "<haiku-model-id>"
-  synth: "<sonnet-model-id>"
+  planner: "claude-opus-4-8"
+  classifier: "claude-haiku-4-5-20251001"
+  synth: "claude-opus-4-8"
 
 taxonomy_seed:
   themes:

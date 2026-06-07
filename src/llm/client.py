@@ -16,6 +16,8 @@ T = TypeVar("T", bound=BaseModel)
 # Approximate cost per million tokens (USD) for billing guard-rails.
 # Update when Anthropic revises pricing.
 _COST_PER_M: dict[str, dict[str, float]] = {
+    "claude-opus-4-8": {"input": 15.0, "output": 75.0},
+    "claude-opus-4-7": {"input": 15.0, "output": 75.0},
     "claude-sonnet-4-6": {"input": 3.0, "output": 15.0},
     "claude-haiku-4-5-20251001": {"input": 0.25, "output": 1.25},
     # fallback for unknown models

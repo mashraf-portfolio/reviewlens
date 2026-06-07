@@ -3,119 +3,119 @@
     {
       "type": "node_enter",
       "node": "plan",
-      "ts": "2026-06-06T15:15:11.932674+00:00",
+      "ts": "2026-06-07T06:12:43.471933+00:00",
       "fetch_loop": 0,
       "raw_reviews": 0
     },
     {
       "type": "node_exit",
       "node": "plan",
-      "ts": "2026-06-06T15:15:11.932674+00:00",
-      "latency_ms": 0.0
+      "ts": "2026-06-07T06:12:53.636709+00:00",
+      "latency_ms": 10172.0
     },
     {
       "type": "node_enter",
       "node": "fetch",
-      "ts": "2026-06-06T15:15:11.932674+00:00",
+      "ts": "2026-06-07T06:12:53.638420+00:00",
       "fetch_loop": 0,
       "raw_reviews": 0
     },
     {
       "type": "node_exit",
       "node": "fetch",
-      "ts": "2026-06-06T15:15:11.932674+00:00",
-      "latency_ms": 0.0
+      "ts": "2026-06-07T06:12:59.706660+00:00",
+      "latency_ms": 6062.0
     },
     {
       "type": "node_enter",
       "node": "triage",
-      "ts": "2026-06-06T15:15:11.932674+00:00",
+      "ts": "2026-06-07T06:12:59.706660+00:00",
       "fetch_loop": 1,
-      "raw_reviews": 40
+      "raw_reviews": 5989
     },
     {
       "type": "node_exit",
       "node": "triage",
-      "ts": "2026-06-06T15:15:11.932674+00:00",
+      "ts": "2026-06-07T06:12:59.706660+00:00",
       "latency_ms": 0.0,
       "decision": "classify",
-      "reason": "triaged=40 >= min_n_floor=5 \u2192 proceed to classify"
+      "reason": "triaged=4011 >= min_n_floor=30 \u2192 proceed to classify"
     },
     {
       "type": "node_enter",
       "node": "classify",
-      "ts": "2026-06-06T15:15:11.932674+00:00",
+      "ts": "2026-06-07T06:12:59.706660+00:00",
       "fetch_loop": 1,
-      "raw_reviews": 40
+      "raw_reviews": 5989
     },
     {
       "type": "node_exit",
       "node": "classify",
-      "ts": "2026-06-06T15:15:11.937433+00:00",
-      "latency_ms": 0.0
+      "ts": "2026-06-07T06:38:40.808594+00:00",
+      "latency_ms": 1541110.0
     },
     {
       "type": "node_enter",
       "node": "cluster",
-      "ts": "2026-06-06T15:15:11.938446+00:00",
+      "ts": "2026-06-07T06:38:40.875183+00:00",
       "fetch_loop": 1,
-      "raw_reviews": 40
+      "raw_reviews": 5989
     },
     {
       "type": "node_exit",
       "node": "cluster",
-      "ts": "2026-06-06T15:15:11.939868+00:00",
-      "latency_ms": 16.0
+      "ts": "2026-06-07T06:38:43.101814+00:00",
+      "latency_ms": 2235.0
     },
     {
       "type": "node_enter",
       "node": "quantify",
-      "ts": "2026-06-06T15:15:11.941152+00:00",
+      "ts": "2026-06-07T06:38:43.106323+00:00",
       "fetch_loop": 1,
-      "raw_reviews": 40
+      "raw_reviews": 5989
     },
     {
       "type": "node_exit",
       "node": "quantify",
-      "ts": "2026-06-06T15:15:13.844205+00:00",
-      "latency_ms": 1890.0
+      "ts": "2026-06-07T06:38:54.601088+00:00",
+      "latency_ms": 11500.0
     },
     {
       "type": "node_enter",
       "node": "diagnose",
-      "ts": "2026-06-06T15:15:13.844205+00:00",
+      "ts": "2026-06-07T06:38:54.616724+00:00",
       "fetch_loop": 1,
-      "raw_reviews": 40
+      "raw_reviews": 5989
     },
     {
       "type": "node_exit",
       "node": "diagnose",
-      "ts": "2026-06-06T15:15:13.844205+00:00",
+      "ts": "2026-06-07T06:38:54.616724+00:00",
       "latency_ms": 0.0
     },
     {
       "type": "node_enter",
       "node": "critique",
-      "ts": "2026-06-06T15:15:13.844205+00:00",
+      "ts": "2026-06-07T06:38:54.618277+00:00",
       "fetch_loop": 1,
-      "raw_reviews": 40
+      "raw_reviews": 5989
     },
     {
       "type": "node_exit",
       "node": "critique",
-      "ts": "2026-06-06T15:15:13.844205+00:00",
-      "latency_ms": 0.0,
+      "ts": "2026-06-07T06:38:57.156071+00:00",
+      "latency_ms": 2531.0,
       "decision": "end",
       "reason": "critique accepted \u2014 claims meet quality bar or loop limit reached"
     }
   ],
   "summary": {
     "plan": {
-      "latency_ms": 0.0,
+      "latency_ms": 10172.0,
       "tool_calls": 0
     },
     "fetch": {
-      "latency_ms": 0.0,
+      "latency_ms": 6062.0,
       "tool_calls": 0
     },
     "triage": {
@@ -123,15 +123,15 @@
       "tool_calls": 0
     },
     "classify": {
-      "latency_ms": 0.0,
+      "latency_ms": 1541110.0,
       "tool_calls": 0
     },
     "cluster": {
-      "latency_ms": 16.0,
+      "latency_ms": 2235.0,
       "tool_calls": 0
     },
     "quantify": {
-      "latency_ms": 1890.0,
+      "latency_ms": 11500.0,
       "tool_calls": 0
     },
     "diagnose": {
@@ -139,7 +139,7 @@
       "tool_calls": 0
     },
     "critique": {
-      "latency_ms": 0.0,
+      "latency_ms": 2531.0,
       "tool_calls": 0
     }
   }
